@@ -1,0 +1,33 @@
+{
+  "name": "zoom",
+  "version": "1.0.0",
+  "description": "create zoom with WebRTC and WebSocket",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cktjdgus45/zoom.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cktjdgus45/zoom/issues"
+  },
+  "homepage": "https://github.com/cktjdgus45/zoom#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.19.3",
+    "@babel/node": "^7.19.1",
+    "@babel/preset-env": "^7.19.4",
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "pug": "^3.0.2"
+  }
+}
