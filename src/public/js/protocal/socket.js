@@ -10,12 +10,16 @@ class Socket {
         })
     }
     onReceiveMessage() {
-        this.#socket.addEventListener('message', function (event) {
-            console.log('Message from server', event.data);
+        this.#socket.addEventListener('message', async function (message) {
+            const messageFromSocket = await message.data.text();
+            console.log(messageFromSocket);
         })
     }
     onClose() {
         console.log("connected with server is closed ! ");
+    }
+    sendMessage(message) {
+        this.#socket.send(message);
     }
 }
 
