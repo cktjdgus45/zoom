@@ -11,3 +11,15 @@ socket.onReceiveMessage();
 
 //연결이 끓기면
 socket.onClose();
+
+const messageList = document.querySelector('ul');
+const messageForm = document.querySelector('form');
+
+function handleSubmit(event) {
+    event.preventDefault();
+    const input = messageForm.querySelector("input");
+    socket.sendMessage(input.value);
+    input.value = "";
+}
+
+messageForm.addEventListener('submit', handleSubmit);

@@ -21,9 +21,14 @@ app.get("/", (req, res, next) => {
 
 const server = http.createServer(app);
 const webSoecketServer = new WebSocketServer({ server });
+
+const sockets = []; //[chrome,firefox,naverwhale];
+
 webSoecketServer.on('connection', (socket) => {
-    socket.on('message', (data) => {
-        console.log('received: %s', data);
+    sockets.push(socket);
+    console.log('connect to browser');
+    socket.on('message', (message) => {
+        sockets.forEach(socket => socket.send(message));
     });
     socket.on('close', () => {
         console.log('disconnected to client')
