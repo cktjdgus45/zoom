@@ -7,19 +7,25 @@ const socket = new Socket(`ws://${window.location.host}`);
 socket.onOpen();
 
 // 메시지 수신
-socket.onReceiveMessage();
+const messageList = document.querySelector('ul');
+socket.onReceiveMessage(messageList);
 
 //연결이 끓기면
 socket.onClose();
 
-const messageList = document.querySelector('ul');
-const messageForm = document.querySelector('form');
-
-function handleSubmit(event) {
+const messageForm = document.querySelector('#message');
+const nickNameForm = document.querySelector('#nickName');
+function handleMessageSubmit(event) {
     event.preventDefault();
     const input = messageForm.querySelector("input");
-    socket.sendMessage(input.value);
+    socket.send("new_message", input.value);
     input.value = "";
 }
-
-messageForm.addEventListener('submit', handleSubmit);
+function handleNickNameSubmit(event) {
+    event.preventDefault();
+    const input = nickNameForm.querySelector("input");
+    socket.send("nickname", input.value);
+    input.value = "";
+}
+messageForm.addEventListener('submit', handleMessageSubmit);
+nickNameForm.addEventListener('submit', handleNickNameSubmit);

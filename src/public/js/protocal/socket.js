@@ -6,13 +6,14 @@ class Socket {
 
     onOpen() {
         this.#socket.addEventListener('open', function () {
-            this.send('Hello Server!');
         })
     }
-    onReceiveMessage() {
+    onReceiveMessage(messageList) {
         this.#socket.addEventListener('message', async function (message) {
             const messageFromSocket = await message.data.text();
-            console.log(messageFromSocket);
+            const li = document.createElement('li');
+            li.innerText = messageFromSocket;
+            messageList.append(li);
         })
     }
     onClose() {
@@ -20,6 +21,13 @@ class Socket {
     }
     sendMessage(message) {
         this.#socket.send(message);
+    }
+    send(type, data) {
+        this.#socket.send(this.#makeMessage(type, data));
+    }
+    #makeMessage(type, payload) {
+        const message = { type, payload };
+        return JSON.stringify(message);
     }
 }
 
