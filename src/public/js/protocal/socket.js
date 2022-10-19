@@ -9,8 +9,8 @@ class Socket {
         })
     }
     onReceiveMessage(messageList) {
-        this.#socket.addEventListener('message', async function (message) {
-            const messageFromSocket = await message.data.text();
+        this.#socket.addEventListener('message', function (message) {
+            const messageFromSocket = message.data;
             const li = document.createElement('li');
             li.innerText = messageFromSocket;
             messageList.append(li);

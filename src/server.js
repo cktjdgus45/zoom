@@ -22,16 +22,22 @@ app.get("/", (req, res, next) => {
 const server = http.createServer(app);
 const webSoecketServer = new WebSocketServer({ server });
 
-const sockets = []; //[chrome,firefox,naverwhale];
+const sockets = []; //[chrome,firefox,naverwhale,brave];
 
 webSoecketServer.on('connection', (socket) => {
     sockets.push(socket);
-    console.log('connect to browser');
-    socket.on('message', (message) => {
-        sockets.forEach(socket => socket.send(message));
+    socket["nickname"] = "Anonymous";
+    socket.on('message', (messageFromClient) => {
+        const { type, payload } = JSON.parse(messageFromClient);
+        console.log(type, payload);
+        if (type === "new_message") {
+            sockets.forEach(socket => socket.send(`${socket.nickname}: ${payload}`));
+        }
+        if (type === "nickname") {
+            socket["nickname"] = payload.trim() === "" ? "Anonymous" : payload;
+        }
     });
     socket.on('close', () => {
-        console.log('disconnected to client')
     })
     socket.send('Hello Client!');
 });
