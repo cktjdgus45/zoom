@@ -23,10 +23,10 @@ const webSocketServer = new Server(httpServer, { /* options */ });
 webSocketServer.on("connection", (socket) => {
     socket.on('enter_room', (roomName, callback) => {
         socket.join(roomName);
-        console.log(socket.rooms);
         callback({
-            status: "ok"
+            status: "room is open sucessfully"
         });
+        socket.to(roomName).emit("welcome");
     })
 });
 
