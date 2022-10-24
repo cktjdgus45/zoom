@@ -21,8 +21,9 @@ const httpServer = http.createServer(app);
 const webSocketServer = new Server(httpServer, { /* options */ });
 
 webSocketServer.on("connection", (socket) => {
-    socket.on('room', (msg, callback) => {
-        console.log(msg);
+    socket.on('enter_room', (roomName, callback) => {
+        socket.join(roomName);
+        console.log(socket.rooms);
         callback({
             status: "ok"
         });

@@ -14,6 +14,11 @@ html(lang="en")
                 form
                     input(placeholder="room name", required, type="text")
                     button Enter Room
-            
+            div#room
+                h3.room_title
+                ul 
+                form
+                    input(placeholder="message" required)            
+                    button Send
     script(type="module" defer src="/socket.io/socket.io.js")
     script(type="module" defer src="/public/js/app.js") 
