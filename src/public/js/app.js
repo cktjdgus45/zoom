@@ -1,31 +1,16 @@
-import Socket from './protocal/socket.js';
+const socket = io();
 
-// WebSocket 연결 생성
-const socket = new Socket(`ws://${window.location.host}`);
+const welcome = document.getElementById('welcome');
+const form = welcome.querySelector('form');
 
-// 연결이 열리면
-socket.onOpen();
-
-// 메시지 수신
-const messageList = document.querySelector('ul');
-socket.onReceiveMessage(messageList);
-
-//연결이 끓기면
-socket.onClose();
-
-const messageForm = document.querySelector('#message');
-const nickNameForm = document.querySelector('#nickName');
-function handleMessageSubmit(event) {
+function handleRoomSubmit(event) {
     event.preventDefault();
-    const input = messageForm.querySelector("input");
-    socket.send("new_message", input.value);
-    input.value = "";
+    const input = form.querySelector('input');
+    socket.emit("room", { payload: input.value }, (response) => {
+        console.log(response.status)
+    });
+    console.log(input.value)
+    input.value = '';
 }
-function handleNickNameSubmit(event) {
-    event.preventDefault();
-    const input = nickNameForm.querySelector("input");
-    socket.send("nickname", input.value);
-    input.value = "";
-}
-messageForm.addEventListener('submit', handleMessageSubmit);
-nickNameForm.addEventListener('submit', handleNickNameSubmit);
+
+form.addEventListener('submit', handleRoomSubmit);
