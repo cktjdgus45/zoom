@@ -28,6 +28,13 @@ webSocketServer.on("connection", (socket) => {
         });
         socket.to(roomName).emit("welcome");
     })
+    socket.on("disconnecting", () => {
+        socket.rooms.forEach((room) => socket.to(room).emit("bye"));
+    })
+    socket.on("new_message", (message, room, callback) => {
+        socket.to(room).emit('new_message', message);
+        callback();
+    })
 });
 
 
