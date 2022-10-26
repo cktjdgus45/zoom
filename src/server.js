@@ -36,8 +36,11 @@ webSocketServer.on("connection", (socket) => {
         socket.to(room).emit('new_message', `${socket.username}:${message}`);
         callback();
     })
-    socket.on("username", (name) => {
+    socket.on("username", (name, callback) => {
         socket["username"] = name;
+        callback({
+            username: socket["username"]
+        });
     })
 });
 
