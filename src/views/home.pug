@@ -17,8 +17,11 @@ html(lang="en")
             div#room
                 h3.room__title
                 ul.room__chat 
-                form
-                    input(placeholder="message" required)            
+                form#name
+                    input(placeholder="name" required type="text")            
+                    button Send
+                form#message
+                    input(placeholder="message" required type="text")            
                     button Send
     script(type="module" defer src="/socket.io/socket.io.js")
     script(type="module" defer src="/public/js/app.js") 
