@@ -20,7 +20,20 @@ app.get("/", (req, res, next) => {
 const httpServer = http.createServer(app);
 const webSocketServer = new Server(httpServer, { /* options */ });
 
+function publicRooms() {
+    const { sids, rooms } = webSocketServer.sockets.adapter;
+    const publicRooms = [];
+    rooms.forEach((_, key) => {
+        if (sids.get(key)) {
+            return;
+        }
+        publicRooms.push(key);
+    })
+    return publicRooms;
+}
+
 webSocketServer.on("connection", (socket) => {
+    console.log(webSocketServer.sockets.adapter)
     socket["username"] = "Anonymous";
     socket.on('enter_room', (roomName, callback) => {
         socket.join(roomName);
@@ -28,9 +41,13 @@ webSocketServer.on("connection", (socket) => {
             status: "room is open sucessfully"
         });
         socket.to(roomName).emit("welcome", socket.username);
+        webSocketServer.sockets.emit("room_change", publicRooms());
     })
     socket.on("disconnecting", () => {
         socket.rooms.forEach((room) => socket.to(room).emit("bye", socket.username));
+    })
+    socket.on("disconnect", () => {
+        webSocketServer.sockets.emit("room_change", publicRooms());
     })
     socket.on("new_message", (message, room, callback) => {
         socket.to(room).emit('new_message', `${socket.username}:${message}`);
