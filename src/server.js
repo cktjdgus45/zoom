@@ -20,6 +20,10 @@ app.get("/", (req, res, next) => {
 const httpServer = http.createServer(app);
 const webSocketServer = new Server(httpServer, { /* options */ });
 
+function countRoomUsers(roomName) {
+    return webSocketServer.sockets.adapter.rooms.get(roomName)?.size;
+}
+
 function publicRooms() {
     const { sids, rooms } = webSocketServer.sockets.adapter;
     const publicRooms = [];
@@ -40,11 +44,11 @@ webSocketServer.on("connection", (socket) => {
         callback({
             status: "room is open sucessfully"
         });
-        socket.to(roomName).emit("welcome", socket.username);
+        socket.to(roomName).emit("welcome", socket.username, countRoomUsers(roomName));
         webSocketServer.sockets.emit("room_change", publicRooms());
     })
     socket.on("disconnecting", () => {
-        socket.rooms.forEach((room) => socket.to(room).emit("bye", socket.username));
+        socket.rooms.forEach((room) => socket.to(room).emit("bye", socket.username, countRoomUsers(room) - 1));
     })
     socket.on("disconnect", () => {
         webSocketServer.sockets.emit("room_change", publicRooms());

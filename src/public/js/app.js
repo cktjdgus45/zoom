@@ -52,12 +52,16 @@ function showRoom(response) {
 }
 form.addEventListener('submit', handleRoomSubmit);
 
-socket.on("welcome", (username) => {
-    addMessage(`${username} joined`)
+socket.on("welcome", (username, userCount) => {
+    addMessage(`${username} joined`);
+    const roomTitle = room.querySelector('.room__title');
+    roomTitle.innerText = `${roomName} Room (${userCount})`;
 });
 
-socket.on("bye", (username) => {
-    addMessage(`${username} left ㅠ`)
+socket.on("bye", (username, userCount) => {
+    addMessage(`${username} left ㅠ`);
+    const roomTitle = room.querySelector('.room__title');
+    roomTitle.innerText = `${roomName} Room (${userCount})`;
 })
 
 socket.on("new_message", (message) => {
