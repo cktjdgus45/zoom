@@ -20,4 +20,10 @@ app.get("/", (req, res, next) => {
 const httpServer = http.createServer(app);
 const webSocketServer = new Server(httpServer, { /* options */ });
 
-httpServer.listen(PORT_NUM);
+webSocketServer.on("connection", (socket) => {
+
+});
+
+
+
+httpServer.listen(3000);
