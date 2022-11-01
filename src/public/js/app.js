@@ -1,4 +1,29 @@
+const call = document.getElementById('call');
+const room = document.getElementById('room');
+const roomForm = room.querySelector('form');
+let roomName;
 const socket = io();
+
+socket.on('welcome', () => {
+    console.log('some one joined the room');
+})
+
+call.hidden = true;
+function startMedia() {
+    room.hidden = true;
+    call.hidden = false;
+    connectMediaStream();
+}
+
+function handleRoomSubmit(event) {
+    event.preventDefault();
+    const input = roomForm.querySelector('input');
+    socket.emit('join_room', input.value, startMedia);
+    roomName = input.value;
+    input.value = '';
+}
+
+roomForm.addEventListener('submit', handleRoomSubmit);
 
 const myFace = document.getElementById('myFace');
 const camerasSelect = document.getElementById('cameras');
@@ -41,8 +66,6 @@ async function connectMediaStream(deviceId) {
         console.log(error);
     }
 }
-
-connectMediaStream();
 
 const muteBtn = document.getElementById('mute');
 const cameraBtn = document.getElementById('camera');
