@@ -21,10 +21,13 @@ const httpServer = http.createServer(app);
 const webSocketServer = new Server(httpServer, { /* options */ });
 
 webSocketServer.on("connection", (socket) => {
-    socket.on('join_room', (roomName, callback) => {
+    socket.on('join_room', async (roomName, callback) => {
         socket.join(roomName);
-        callback();
+        await callback();
         socket.to(roomName).emit('welcome');
+    })
+    socket.on('offer', (offer, roomName) => {
+        socket.to(roomName).emit("offer", offer)
     })
 });
 
