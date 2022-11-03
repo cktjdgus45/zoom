@@ -7,12 +7,15 @@ let myPeerConnection;
 const socket = io();
 
 socket.on('welcome', async () => {
+    console.log(myPeerConnection)
     const offer = await myPeerConnection.createOffer();
     myPeerConnection.setLocalDescription(offer);
     socket.emit("offer", offer, roomName);
 })
-socket.on("offer", offer => {
-    console.log(offer);
+socket.on("offer", async(offer) => {
+    myPeerConnection.setRemoteDescription(offer);
+    const answer = await myPeerConnection.createAnswer();
+    console.log(answer);
 })
 
 call.hidden = true;
@@ -29,10 +32,11 @@ async function startMedia() {
     makeConnection();
 }
 
-function handleRoomSubmit(event) {
+async function handleRoomSubmit(event) {
     event.preventDefault();
     const input = roomForm.querySelector('input');
-    socket.emit('join_room', input.value, startMedia);
+    await startMedia();
+    socket.emit('join_room', input.value);
     roomName = input.value;
     input.value = '';
 }
