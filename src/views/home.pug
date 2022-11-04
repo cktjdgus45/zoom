@@ -20,5 +20,6 @@ html(lang="en")
                     button#mute Sound
                     button#camera Camera
                     select#cameras
+                    video#peersStream(autoplay,playsinline,width="400",height="400")
     script(type="module" defer src="/socket.io/socket.io.js")
     script(type="module" defer src="/public/js/app.js") 
